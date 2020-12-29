@@ -1,5 +1,5 @@
 \documentclass[punct=kaiming, fontset=fandol]{ctexbook}
-\usepackage{amsmath,amssymb,mathtools,amsthm}
+\usepackage{amsmath,amssymb,mathtools,amsthm,physics}
 \renewcommand{\theequation}{\thesection.\arabic{equaiton}}
 \numberwithin{equation}{section}
 \renewcommand{\thefigure}{\thesection.\arabic{figure}}
@@ -44,6 +44,7 @@
 \setmathfont{Latin Modern Math}
 
 % \def\TT{\symup{T}}
+\def\ee{\symup{e}}
 \def\TT{\symsfup{T}}
 \def\HH{\symsfup{H}}
 \def\bf#1{\symbfit{#1}}
@@ -51,6 +52,7 @@
 \def\bup#1{\symbfup{#1}}
 \else
 \usepackage{bm}
+\def\ee{\mathrm{e}}
 \def\TT{\mathrm{T}}
 \def\HH{\mathrm{H}}
 \def\bf#1{\bm{#1}}
@@ -452,5 +454,104 @@
     \end{proof}
     一般说来，矩阵的乘法不满足交换律，即 $\bf A \bf B \ne \bf B \bf A$。
   \end{theo}
-  
+
+  令向量 $\bf x = [x_1,x_2,\cdots,x_n]^{\TT}$ 和 $\bf y = [y_1,y_2,\cdots,y_n]^{\TT}$，矩阵与向量的乘积 $\bf A \bf x = \bf y$ 可视为向量 $\bf x$ 的线性变换。此时，$n \times n$ 矩阵 $\bf A$ 称为线性变换矩阵。若向量 $\bf y$ 到 $\bf x$ 的线性逆变换 $\bf A^{-1}$ 存在，则
+  \begin{equation}
+    \bf x = \bf A^{-1} \bf y
+  \end{equation}
+  这一方程可视为在原线性变换 $\bf A \bf x = \bf y$ 两边左乘 $\bf A^{-1}$ 之后得到的结果 $\bf A^{-1} \bf A \bf x = \bf A^{-1} \bf y$。因此，线性逆变换 $\bf A^{-1}$ 应该满足 $\bf A^{-1} \bf A = \bf I$ 之关系。另一方面，$ \bf x = \bf A^{-1} \bf y$ 也应该是可逆的，即两边左乘 $\bf A$ 后得到的 $\bf A \bf x = \bf A \bf A^{-1} \bf y$ 应该与原线性变换 $\bf A \bf x = \bf y$ 一致，故 $\bf A^{-1}$ 还应该满足 $\bf A \bf A^{-1} = \bf I$。
+
+  综合以上讨论，可以得到逆矩阵的定义如下。
+  \begin{defn}
+    令 $\bf A$ 是一个 $n \times n$ 矩阵。称矩阵 $\bf A$ 可逆，若可以找到一个 $n \times n$ 矩阵 $\bf A^{-1}$ 满足 $\bf A \bf A^{-1} = \bf A^{-1} \bf A = \bf I$，并称 $\bf A^{-1}$ 是矩阵 $\bf A$ 的逆矩阵。
+  \end{defn}
+  下面是共轭、转置、共轭转置和逆矩阵的性质。
+  \begin{enumerate}
+    \item 矩阵的共轭、转置和共轭转置满足分配律
+    \[
+      (\bf A + \bf B)^* = \bf A^* + \bf B^*, \quad
+      (\bf A + \bf B)^{\TT} = \bf A^{\TT} + \bf B^{\TT}, \quad
+      (\bf A + \bf B)^{\HH} = \bf A^{\HH} + \bf B^{\HH}
+    \]
+    \item 矩阵乘积的转置、共轭转置和逆矩阵满足关系式
+    \begin{align*}
+      (\bf A \bf B)^{\TT} &=  \bf B^{\TT} \bf A^{\TT}, \quad (\bf A \bf B)^{\HH} = \bf B^{\HH} \bf A^{\HH} \\
+      (\bf A \bf B)^{-1}  &=  \bf B^{-1} \bf A^{-1} \quad (\bf A,\bf B \text{ 为可逆的正方矩阵})
+    \end{align*}
+    \item 共轭、转置和共轭转置等符号均可与求逆符号交换，即有
+    \[
+      (\bf A^*)^{-1} = (\bf A^{-1})^*, \quad
+      (\bf A^{\TT})^{-1} = (\bf A^{-1})^{\TT}, \quad
+      (\bf A^{\HH})^{-1} = (\bf A^{-1})^{\HH}
+    \]
+    因此，常常分别采用紧凑的数学符号 $\bf A^{-*}$，$\bf A^{-\TT}$ 和 $\bf A^{-\HH}$。
+    \item 对于任意矩阵 $\bf A$，矩阵 $\bf B = \bf A^{\HH} \bf A$ 都是 Hermitian 矩阵。若 $\bf A$ 可逆，则对于 Hermitian 矩阵 $\bf B = \bf A^{\HH} \bf A$，有 $\bf A^{-\HH} \bf B \bf A^{-1} = \bf A^{-\HH} \bf A^{\HH} \bf A \bf A^{-1} = \bf I$。
+  \end{enumerate}
+
+  在一些应用中，常常涉及一个 $n \times n$ 矩阵 $\bf A$ 与它自身的乘积，从中可以引出两个重要的概念。
+  \begin{defn}
+    矩阵 $\bf A_{n \times n}$ 称为对合矩阵（involutory matrix）或幂单矩阵（unipotent matrix），若 $\bf A^2 = \bf A \bf A = \bf I$。
+  \end{defn}
+  若 $\bf A$ 为对合或者幂单矩阵，则函数 $f(·)$ 具有以下性质\cite{403}
+  \begin{equation}
+    f(s \bf I + t \bf A) = \frac{1}{2} [ (\bf I + \bf A) f(s+t) + (\bf I - \bf A) f(s-t) ]
+  \end{equation}
+
+  幂等矩阵与对合矩阵的关系：矩阵 $\bf A$ 是对合矩阵，当且仅当 $\frac{1}{2} (\bf A + \bf I)$ 为幂等矩阵。
+
+  $n \times n$ 矩阵 $\bf A$ 称为幂零矩阵（nilpotent matrix），若 $\bf A^2 = \bf A \bf A = \bf O$（零矩阵）。
+
+  若 $\bf A$ 为幂零矩阵，则函数 $f(·)$ 具有以下性质\cite{403}
+  \begin{equation}
+    f(s \bf I + t \bf A) = \bf I f(s) + t \bf A f'(s)
+  \end{equation}
+  式中 $f'(s)$ 表示函数 $f(s)$ 的一阶导数。
+
+  除了上述矩阵的基本运算外，还可定义矩阵函数：三角函数\cite{403}
+  \begin{align}
+    \sin(\bf A) &= \sum_{n=0}^{\infty} \frac{(-1)^n \bf A^{2n+1}}{(2n+1)!} = \bf A - \frac{1}{3!} \bf A^3 + \frac{1}{5!} \bf A^5 - \cdots \\
+    \cos(\bf A) &= \sum_{n=0}^{\infty} \frac{(-1)^n \bf A^{2n}}{(2n)!} = \bf I - \frac{1}{2!} \bf A^2 + \frac{1}{4!} \bf A^4 - \cdots
+  \end{align}
+  以及矩阵的指数函数和对数函数\cite{328,198}
+  \begin{align}
+    \ee^{\bf A}         &= \sum_{n=0}^{\infty} \frac{1}{n!} \bf A^n = \bf I + \bf A + \frac{1}{2} \bf A^2 + \frac{1}{3!} \bf A^3 + \cdots \\
+    \ee^{- \bf A}       &= \sum_{n=0}^{\infty} \frac{1}{n!} (-1)^n \bf A^n = \bf I - \bf A + \frac{1}{2} \bf A^2 - \frac{1}{3!} \bf A^3 + \cdots \\
+    \ee^{\bf A t}       &= \bf I + \bf A t + \frac{1}{2} \bf A^2 t^2 + \frac{1}{3!} \bf A^3 t^3 + \cdots \\
+    \ln(\bf I + \bf A)  &= \sum_{n=1}^{\infty} \frac{(-1)^{n-1}}{n} \bf A^n = \bf A - \frac{1}{2} \bf A^2 + \frac{1}{3} \bf A^3 - \cdots
+  \end{align}
+
+  如果矩阵 $\bf A$ 的元素 $a_{ij}$ 都是参数 $t$ 的函数，则矩阵的导数定义为
+  \begin{equation}
+    \frac{\dd{\bf A}}{\dd{t}} = \dot{\bf A} = \begin{bmatrix}
+      \frac{\dd{a_{11}}}{\dd{t}} & \frac{\dd{a_{12}}}{\dd{t}} & \cdots & \frac{\dd{a_{1n}}}{\dd{t}} \\
+      \frac{\dd{a_{21}}}{\dd{t}} & \frac{\dd{a_{22}}}{\dd{t}} & \cdots & \frac{\dd{a_{2n}}}{\dd{t}} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      \frac{\dd{a_{m1}}}{\dd{t}} & \frac{\dd{a_{m2}}}{\dd{t}} & \cdots & \frac{\dd{a_{mn}}}{\dd{t}}
+    \end{bmatrix}
+  \end{equation}
+  同样可定义矩阵的高阶导数。
+
+  矩阵的积分定义为
+  \begin{equation}
+    \int \bf A \dd{t} = \begin{bmatrix}
+      \int a_{11} \dd{t} & \int a_{12} \dd{t} & \cdots & \int a_{1n} \dd{t} \\
+      \int a_{21} \dd{t} & \int a_{22} \dd{t} & \cdots & \int a_{2n} \dd{t} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      \int a_{m1} \dd{t} & \int a_{m2} \dd{t} & \cdots & \int a_{mn} \dd{t}
+    \end{bmatrix}
+  \end{equation}
+  同样也可定义矩阵的多重积分。
+
+  指数矩阵函数的导数定义为
+  \begin{equation}
+    \frac{\dd{\ee^{\bf A t}}}{\dd{t}} = \bf A \ee^{\bf A t} = \ee^{\bf A t} \bf A
+  \end{equation}
+
+  矩阵乘积的导数定义为
+  \begin{equation}
+    \frac{\dd}{\dd{t}} (\bf A \bf B) = \frac{\dd{\bf A}}{\dd{t}} \bf B + \bf A \frac{\dd{\bf B}}{\dd{t}}
+  \end{equation}
+  其中，$\bf A$ 和 $\bf B$ 都是变量 $t$ 的矩阵函数。
+
+  \subsection{向量的线性无关性与非奇异矩阵}
 \end{document}
